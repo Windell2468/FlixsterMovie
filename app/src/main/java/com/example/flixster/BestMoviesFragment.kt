@@ -46,13 +46,7 @@ class BestMoviesFragment : Fragment(), OnListFragmentInteractionListener {
             "https://api.themoviedb.org/3/movie/now_playing",
             params,
             object : JsonHttpResponseHandler() {
-                override fun onSuccess(
-
-                    statusCode: Int,
-                    headers: Headers?,
-                    response: JSONObject
-
-                )  {
+                override fun onSuccess(statusCode: Int, headers: Headers?, json: JSON?) {
                     // Handle successful response here
                 }
 
@@ -72,7 +66,6 @@ class BestMoviesFragment : Fragment(), OnListFragmentInteractionListener {
         Toast.makeText(context, "test: " + item.title, Toast.LENGTH_LONG).show()
     }
 
-    override fun onListFragmentInteraction(item: BestMovie?) {
-        // Implement the interface function here
+
     }
-}
+
