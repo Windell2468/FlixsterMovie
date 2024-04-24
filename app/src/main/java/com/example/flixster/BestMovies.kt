@@ -1,5 +1,6 @@
 package com.example.flixster
 
+
 import com.google.gson.annotations.SerializedName
 
 class BestMovie {

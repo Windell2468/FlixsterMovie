@@ -1,3 +1,5 @@
+package com.example.flixster
+
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -43,10 +45,14 @@ class BestMoviesFragment : Fragment(), OnListFragmentInteractionListener {
 
 
         client.get(
-            "https://api.themoviedb.org/3/movie/now_playing",
+            "https://api.themoviedb.org/3/movie/now_playing?&api_key=a07e22bc18f5cb106bfe4cc1f83ad8ed",
             params,
             object : JsonHttpResponseHandler() {
-                override fun onSuccess(statusCode: Int, headers: Headers?, json: JSON?) {
+                override fun onSuccess(
+                    statusCode: Int,
+                    headers: Headers?,
+                    json:JsonHttpResponseHandler.JSON) {
+
                     // Handle successful response here
                 }
 
