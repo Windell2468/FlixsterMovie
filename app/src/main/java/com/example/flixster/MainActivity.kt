@@ -1,7 +1,9 @@
-import androidx.appcompat.app.AppCompatActivity
-import android.os.Bundle
-import com.example.flixster.R // Import your R class from your project's package
+package com.example.flixster
 
+import BestMoviesFragment
+import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
+import com.example.flixster.R
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -15,5 +17,3 @@ class MainActivity : AppCompatActivity() {
         fragmentTransaction.replace(R.id.content, BestMoviesFragment(), null).commit()
     }
 }
-
-
