@@ -1,6 +1,7 @@
 package com.example.flixster
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,19 +13,32 @@ import androidx.recyclerview.widget.RecyclerView
 import com.codepath.asynchttpclient.AsyncHttpClient
 import com.codepath.asynchttpclient.RequestParams
 import com.codepath.asynchttpclient.callback.JsonHttpResponseHandler
+import com.codepath.BestMovieslistapp.R
 import com.example.flixster.BestMovie
+import com.example.flixster.BestMoviesRecyclerViewAdapter
 import com.example.flixster.OnListFragmentInteractionListener
 import com.example.flixster.R
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import okhttp3.Headers
 import org.json.JSONObject
 
+// --------------------------------//
+// CHANGE THIS TO BE YOUR API KEY  //
+// --------------------------------//
 private const val API_KEY = "a07e22bc18f5cb106bfe4cc1f83ad8ed"
 
+/*
+ * The class for the only fragment in the app, which contains the progress bar,
+ * recyclerView, and performs the network calls to the NY Times API.
+ */
 class BestMoviesFragment : Fragment(), OnListFragmentInteractionListener {
 
+    /*
+     * Constructing the view
+     */
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
+        inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.fragment_best_movies_list, container, false)
@@ -36,42 +50,75 @@ class BestMoviesFragment : Fragment(), OnListFragmentInteractionListener {
         return view
     }
 
+    /*
+     * Updates the RecyclerView adapter with new data.  This is where the
+     * networking magic happens!
+     */
     private fun updateAdapter(progressBar: ContentLoadingProgressBar, recyclerView: RecyclerView) {
         progressBar.show()
 
+        // Create and set up an AsyncHTTPClient() here
         val client = AsyncHttpClient()
         val params = RequestParams()
         params["api-key"] = API_KEY
-
-
-        client.get(
+        // Using the client, perform the HTTP request
+        client[
             "https://api.themoviedb.org/3/movie/now_playing?&api_key=a07e22bc18f5cb106bfe4cc1f83ad8ed",
             params,
-            object : JsonHttpResponseHandler() {
+            object : JsonHttpResponseHandler()
+            //Uncomment me once you complete the above sections!
+            {
+                /*
+                 * The onSuccess function gets called when
+                 * HTTP response status is "200 OK"
+                 */
                 override fun onSuccess(
                     statusCode: Int,
-                    headers: Headers?,
-                    json:JsonHttpResponseHandler.JSON) {
+                    headers: Headers,
+                    json: JsonHttpResponseHandler.JSON
+                ) {
+                    // The wait for a response is over
+                    progressBar.hide()
 
-                    // Handle successful response here
+                    //TODO - Parse JSON into Models
+                    val resultsJSON : JSONObject = json.jsonObject.get("results") as JSONObject
+                    val gson = Gson()
+                    val arrayMovieType = object : TypeToken<List<BestMovie>>() {}.type
+                    val models : List<BestMovie> = gson.fromJson(resultsJSON, arrayMovieType)
+                    recyclerView.adapter = BestMoviesRecyclerViewAdapter(models, this@BestMoviesFragment)
+                    // Look for this in Logcat:
+                    Log.d("BestMoviesFragment", "response successful")
+                    Log.d("BestMoviesFragment", json.toString())
                 }
 
+                /*
+                 * The onFailure function gets called when
+                 * HTTP response status is "4XX" (eg. 401, 403, 404)
+                 */
                 override fun onFailure(
                     statusCode: Int,
                     headers: Headers?,
-                    response: String?,
-                    throwable: Throwable?
+                    errorResponse: String,
+                    t: Throwable?
                 ) {
-                    // Handle failure here
+                    // The wait for a response is over
+                    progressBar.hide()
+
+                    // If the error is not null, log it!
+                    t?.message?.let {
+                        Log.e("BestMoviesFragment", errorResponse)
+                    }
                 }
-            }
-        )
+            }]
+
+
     }
 
+    /*
+     * What happens when a particular book is clicked.
+     */
     override fun onItemClick(item: BestMovie) {
         Toast.makeText(context, "test: " + item.title, Toast.LENGTH_LONG).show()
     }
 
-
-    }
-
+}
