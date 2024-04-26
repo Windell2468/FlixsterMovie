@@ -13,7 +13,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.codepath.asynchttpclient.AsyncHttpClient
 import com.codepath.asynchttpclient.RequestParams
 import com.codepath.asynchttpclient.callback.JsonHttpResponseHandler
-import com.codepath.BestMovieslistapp.R
+
 import com.example.flixster.BestMovie
 import com.example.flixster.BestMoviesRecyclerViewAdapter
 import com.example.flixster.OnListFragmentInteractionListener
@@ -21,6 +21,7 @@ import com.example.flixster.R
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import okhttp3.Headers
+import org.json.JSONArray
 import org.json.JSONObject
 
 // --------------------------------//
@@ -81,10 +82,10 @@ class BestMoviesFragment : Fragment(), OnListFragmentInteractionListener {
                     progressBar.hide()
 
                     //TODO - Parse JSON into Models
-                    val resultsJSON : JSONObject = json.jsonObject.get("results") as JSONObject
+                    val results = json.jsonObject.get("results") as JSONArray
                     val gson = Gson()
                     val arrayMovieType = object : TypeToken<List<BestMovie>>() {}.type
-                    val models : List<BestMovie> = gson.fromJson(resultsJSON, arrayMovieType)
+                    val models : List<BestMovie> = gson.fromJson(results.toString(),arrayMovieType)
                     recyclerView.adapter = BestMoviesRecyclerViewAdapter(models, this@BestMoviesFragment)
                     // Look for this in Logcat:
                     Log.d("BestMoviesFragment", "response successful")
