@@ -89,7 +89,8 @@ class BestMoviesFragment : Fragment(), OnListFragmentInteractionListener {
                     recyclerView.adapter = BestMoviesRecyclerViewAdapter(models, this@BestMoviesFragment)
                     // Look for this in Logcat:
                     Log.d("BestMoviesFragment", "response successful")
-                    Log.d("BestMoviesFragment", json.toString())
+                    Log.d("BestMoviesFragment",json.toString())
+
                 }
 
                 /*

@@ -10,6 +10,6 @@ class BestMovie {
     @SerializedName("description")
     var description: String? = null
 
-    @SerializedName("movieImageUrl")
+    @SerializedName("poster_path")
     var movieImageUrl: String? = null
 }
